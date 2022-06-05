@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+
+    <title>Register Confirmation Email</title>
+</head>
+<body>
+<p th:text="${'Hello ' + username}">
+<p>Thanks for creating an account. To complete the registration process please enter the following code on your registration
+    page.</p>
+<b style="font-size: 30px" th:text="${code}" ></b>
+
+<p>You can ignore this email if you didn't register.</p>
+
+<p>Best regards<br></p>
+<p>Example Team</p>
+</body>
+</html>
