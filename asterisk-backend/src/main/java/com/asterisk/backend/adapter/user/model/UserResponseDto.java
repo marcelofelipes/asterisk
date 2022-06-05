@@ -1,4 +1,4 @@
-package com.asterisk.backend.adapter.user;
+package com.asterisk.backend.adapter.user.model;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;

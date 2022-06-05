@@ -1,4 +1,4 @@
-package com.asterisk.backend.adapter.authentication;
+package com.asterisk.backend.adapter.authentication.model;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

@@ -1,8 +1,8 @@
 package com.asterisk.backend.service;
 
-import com.asterisk.backend.adapter.authentication.LoginRequestDto;
-import com.asterisk.backend.adapter.authentication.RegisterConfirmRequestDto;
-import com.asterisk.backend.adapter.authentication.RegisterRequestDto;
+import com.asterisk.backend.adapter.authentication.model.LoginRequestDto;
+import com.asterisk.backend.adapter.authentication.model.RegisterConfirmRequestDto;
+import com.asterisk.backend.adapter.authentication.model.RegisterRequestDto;
 import com.asterisk.backend.domain.RegisterConfirmationToken;
 import com.asterisk.backend.domain.User;
 import org.slf4j.Logger;

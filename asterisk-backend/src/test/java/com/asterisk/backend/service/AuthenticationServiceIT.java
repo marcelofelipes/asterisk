@@ -2,7 +2,7 @@ package com.asterisk.backend.service;
 
 import com.asterisk.backend._factory.UserTestFactory;
 import com.asterisk.backend._integration.IntegrationTest;
-import com.asterisk.backend.adapter.authentication.LoginRequestDto;
+import com.asterisk.backend.adapter.authentication.model.LoginRequestDto;
 import com.asterisk.backend.store.user.UserEntity;
 import com.asterisk.backend.store.user.UserRepository;
 import org.junit.jupiter.api.BeforeEach;

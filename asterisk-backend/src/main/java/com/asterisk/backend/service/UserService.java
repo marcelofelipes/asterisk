@@ -1,6 +1,6 @@
 package com.asterisk.backend.service;
 
-import com.asterisk.backend.adapter.authentication.RegisterRequestDto;
+import com.asterisk.backend.adapter.authentication.model.RegisterRequestDto;
 import com.asterisk.backend.domain.User;
 import com.asterisk.backend.store.user.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;

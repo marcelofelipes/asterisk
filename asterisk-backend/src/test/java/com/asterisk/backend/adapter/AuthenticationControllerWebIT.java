@@ -2,7 +2,7 @@ package com.asterisk.backend.adapter;
 
 import com.asterisk.backend._integration.WebIntegrationTest;
 import com.asterisk.backend.adapter.authentication.AuthenticationController;
-import com.asterisk.backend.adapter.authentication.LoginRequestDto;
+import com.asterisk.backend.adapter.authentication.model.LoginRequestDto;
 import com.asterisk.backend.application.common.UserDetailsImpl;
 import com.asterisk.backend.application.common.UserDetailsServiceImpl;
 import com.asterisk.backend.application.security.error.ForbiddenErrorHandler;
@@ -18,7 +18,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

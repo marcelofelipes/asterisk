@@ -4,7 +4,7 @@ import com.asterisk.backend._factory.UserTestFactory;
 import com.asterisk.backend._integration.WebIntegrationTest;
 import com.asterisk.backend._integration.authentication.WithFakeAsteriskUser;
 import com.asterisk.backend.adapter.user.UserController;
-import com.asterisk.backend.adapter.user.UserResponseDto;
+import com.asterisk.backend.adapter.user.model.UserResponseDto;
 import com.asterisk.backend.application.common.UserDetailsServiceImpl;
 import com.asterisk.backend.application.security.domain.UserSecurity;
 import com.asterisk.backend.application.security.error.ForbiddenErrorHandler;

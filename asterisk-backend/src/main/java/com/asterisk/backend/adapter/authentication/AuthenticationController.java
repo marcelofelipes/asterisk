@@ -1,6 +1,9 @@
 package com.asterisk.backend.adapter.authentication;
 
 import com.asterisk.backend.adapter.ResponseDto;
+import com.asterisk.backend.adapter.authentication.model.LoginRequestDto;
+import com.asterisk.backend.adapter.authentication.model.RegisterConfirmRequestDto;
+import com.asterisk.backend.adapter.authentication.model.RegisterRequestDto;
 import com.asterisk.backend.application.security.jwt.JwtHelper;
 import com.asterisk.backend.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,5 +1,6 @@
 package com.asterisk.backend.adapter.user;
 
+import com.asterisk.backend.adapter.user.model.UserResponseDto;
 import com.asterisk.backend.mapper.UserMapper;
 import com.asterisk.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
