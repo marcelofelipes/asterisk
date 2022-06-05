@@ -1,0 +1,30 @@
+version: '2'
+services:
+  app:
+    restart: always
+    image: 'asterisk-backend'
+    ports:
+      - "8080:8080"
+    container_name: app
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/<YOUR-DATABASE>
+      - SPRING_DATASOURCE_USERNAME=<YOUR-DATABASE-USER>
+      - SPRING_DATASOURCE_PASSWORD=<YOUR-DATABASE-PASSWORD>
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+  db:
+    restart: always
+    image: 'postgres:13.1-alpine'
+    ports:
+      - "5432:5432"
+    container_name: db
+    environment:
+      - POSTGRES_USER=<YOUR-DATABASE-USER>
+      - POSTGRES_PASSWORD=<YOUR-DATABASE-PASSWORD>
+      - POSTGRES_DB=<YOUR-DATABASE>
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:
