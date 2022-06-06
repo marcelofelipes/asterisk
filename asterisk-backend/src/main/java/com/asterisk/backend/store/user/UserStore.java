@@ -5,6 +5,7 @@ import com.asterisk.backend.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,7 +25,7 @@ public class UserStore implements UserManager{
     public User findUserByEmail(final String email) {
         final Optional<UserEntity> userEntity = this.userRepository.findByEmail(email);
 
-        if (userEntity.isEmpty()) return null;
+        if (userEntity.isEmpty()) throw new EntityNotFoundException();
 
         return this.userMapper.toUser(userEntity.get());
     }
@@ -41,7 +42,7 @@ public class UserStore implements UserManager{
     public User findUserById(final UUID userId) {
         final Optional<UserEntity> userEntity = this.userRepository.findById(userId);
 
-        if (userEntity.isEmpty()) return null;
+        if (userEntity.isEmpty()) throw new EntityNotFoundException();
 
         return this.userMapper.toUser(userEntity.get());
     }

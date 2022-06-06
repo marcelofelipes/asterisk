@@ -2,15 +2,15 @@ package com.asterisk.backend.service;
 
 import com.asterisk.backend._factory.UserTestFactory;
 import com.asterisk.backend._integration.IntegrationTest;
-import com.asterisk.backend.adapter.authentication.model.LoginRequestDto;
-import com.asterisk.backend.adapter.authentication.model.RegisterConfirmRequestDto;
-import com.asterisk.backend.adapter.authentication.model.RegisterRequestDto;
+import com.asterisk.backend.adapter.authentication.model.*;
 import com.asterisk.backend.domain.User;
 import com.asterisk.backend.infrastructure.ConfirmationCodeUtil;
 import com.asterisk.backend.store.user.UserEntity;
 import com.asterisk.backend.store.user.UserRepository;
 import com.asterisk.backend.store.user.confirmation.RegisterConfirmationTokenEntity;
 import com.asterisk.backend.store.user.confirmation.RegisterConfirmationTokenRepository;
+import com.asterisk.backend.store.user.forgotpassword.ForgotPasswordTokenRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -47,6 +47,9 @@ public class AuthenticationServiceIT extends IntegrationTest {
     @Autowired
     private RegisterConfirmationTokenRepository registerConfirmationTokenRepository;
 
+    @Autowired
+    private ForgotPasswordTokenRepository forgotPasswordTokenRepository;
+
     @MockBean
     private EmailService emailService;
 
@@ -55,6 +58,9 @@ public class AuthenticationServiceIT extends IntegrationTest {
 
     @Captor
     private ArgumentCaptor<String> confirmationCodeCaptor;
+
+    @Captor
+    private ArgumentCaptor<UUID> forgotPasswordTokenIdCaptor;
 
     private UserEntity enabledUser;
 
@@ -67,6 +73,12 @@ public class AuthenticationServiceIT extends IntegrationTest {
                 .newUserEntity();
 
         this.enabledUser = this.userRepository.save(enabledUserEntity);
+    }
+
+    @AfterEach
+    @Override
+    public void teardown() {
+        this.userRepository.deleteAll();
     }
 
     @Test
@@ -194,6 +206,141 @@ public class AuthenticationServiceIT extends IntegrationTest {
         assertThat(result).isFalse();
     }
 
+    @Test
+    public void testConfirmRegistrationResendCode() {
+        // First part - registering an account
+        final UUID confirmationId = this.assertRegisterSuccess();
+
+        reset(this.emailService);
+
+        RegisterConfirmationTokenEntity entity = this.registerConfirmationTokenRepository.getById(confirmationId);
+        final String oldCode = entity.getCode();
+
+        // WHEN
+        final boolean result = this.authenticationService.resendConfirmationCode(confirmationId);
+
+        // THEN
+        verify(this.emailService, times(1)).sendRegisterConfirmationEmail(any(User.class),
+                this.confirmationCodeCaptor.capture());
+
+        assertThat(result).isTrue();
+        entity = this.registerConfirmationTokenRepository.getById(confirmationId);
+
+        assertThat(entity.getCode()).isNotEqualTo(oldCode);
+    }
+
+    @Test
+    public void testConfirmRegistrationResendCodeTokenExpired() throws InterruptedException {
+        // First part - registering an account
+        final UUID confirmationId = this.assertRegisterSuccess();
+
+        reset(this.emailService);
+        Thread.sleep(this.tokenProperties.getRegisterConfirmationExpiration() * 1000);
+
+        // WHEN
+        final boolean result = this.authenticationService.resendConfirmationCode(confirmationId);
+
+        // THEN
+        assertThat(result).isFalse();
+        verify(this.emailService, times(0)).sendRegisterConfirmationEmail(any(User.class), any(String.class));
+    }
+
+    @Test
+    public void testConfirmRegistrationResendCodeTokenNotFound() throws InterruptedException {
+        // First part - registering an account
+        this.assertRegisterSuccess();
+
+        reset(this.emailService);
+
+        // WHEN
+        final boolean result = this.authenticationService.resendConfirmationCode(UUID.randomUUID());
+
+        // THEN
+        assertThat(result).isFalse();
+        verify(this.emailService, times(0)).sendRegisterConfirmationEmail(any(User.class), any(String.class));
+    }
+
+    @Test
+    public void testForgotPasswordSuccess() {
+        // Perform a forgot password request
+        final UUID forgotPasswordTokenId = this.assertForgotPasswordRequestSuccess();
+
+        assertThat(forgotPasswordTokenId).isEqualTo(this.forgotPasswordTokenIdCaptor.getValue());
+        assertThat(this.forgotPasswordTokenRepository.findById(forgotPasswordTokenId)).isPresent();
+    }
+
+    @Test
+    public void testForgotPasswordUserNotFound() {
+        // GIVEN
+        final UserTestFactory userTestFactory = new UserTestFactory()
+                .setEmail("mister2@mail.com")
+                .setUsername("someone2");
+        ;
+        final UserEntity user = userTestFactory.newUserEntity();
+        this.userRepository.save(user);
+
+        final PasswordForgetRequestDto passwordForgetRequestDto = new PasswordForgetRequestDto("some@email.com");
+
+        // WHEN
+        final Optional<UUID> forgotPasswordTokenId =
+                this.authenticationService.generateForgotPasswordToken(passwordForgetRequestDto);
+
+        // THEN
+        verify(this.emailService, times(0))
+                .sendForgotPasswordEmail(any(User.class), any(UUID.class));
+        assertThat(forgotPasswordTokenId).isEmpty();
+    }
+
+    @Test
+    public void testResetPasswordSuccess() {
+        // Perform a forgot password request
+        final UUID forgotPasswordTokenId = this.assertForgotPasswordRequestSuccess();
+
+        // GIVEN
+        final PasswordChangeRequestDto passwordChangeRequestDto = new PasswordChangeRequestDto("newpassword",
+                "newpassword");
+
+        // WHEN
+        final boolean result = this.authenticationService.resetPassword(forgotPasswordTokenId,
+                passwordChangeRequestDto);
+
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    public void testResetPasswordTokenNotFound() {
+        // Perform a forgot password request
+        this.assertForgotPasswordRequestSuccess();
+
+        // GIVEN
+        final PasswordChangeRequestDto passwordChangeRequestDto = new PasswordChangeRequestDto("newpassword",
+                "newpassword");
+
+        // WHEN
+        final boolean result = this.authenticationService.resetPassword(UUID.randomUUID(),
+                passwordChangeRequestDto);
+
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    public void testResetPasswordTokenExpired() throws InterruptedException {
+        // Perform a forgot password request
+        this.assertForgotPasswordRequestSuccess();
+
+        // GIVEN
+        final PasswordChangeRequestDto passwordChangeRequestDto = new PasswordChangeRequestDto("newpassword",
+                "newpassword");
+
+        Thread.sleep(this.tokenProperties.getForgotPasswordExpiration() * 1000);
+
+        // WHEN
+        final boolean result = this.authenticationService.resetPassword(UUID.randomUUID(),
+                passwordChangeRequestDto);
+
+        assertThat(result).isFalse();
+    }
+
     /**
      * Performs a successful registration
      *
@@ -214,5 +361,26 @@ public class AuthenticationServiceIT extends IntegrationTest {
                 this.confirmationCodeCaptor.capture());
 
         return confirmationId;
+    }
+
+    private UUID assertForgotPasswordRequestSuccess() {
+        final UserTestFactory userTestFactory = new UserTestFactory()
+                .setEmail("mister@mail.com")
+                .setUsername("someone");
+        UserEntity user = userTestFactory.newUserEntity();
+        user = this.userRepository.save(user);
+
+        final PasswordForgetRequestDto passwordForgetRequestDto = new PasswordForgetRequestDto(user.getEmail());
+
+        // WHEN
+        final Optional<UUID> forgotPasswordTokenId =
+                this.authenticationService.generateForgotPasswordToken(passwordForgetRequestDto);
+
+        // THEN
+        verify(this.emailService, times(1))
+                .sendForgotPasswordEmail(any(User.class), this.forgotPasswordTokenIdCaptor.capture());
+        assertThat(forgotPasswordTokenId).isPresent();
+
+        return forgotPasswordTokenId.get();
     }
 }

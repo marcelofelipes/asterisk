@@ -40,4 +40,8 @@ public class RegisterConfirmationService {
     public void deleteToken(final RegisterConfirmationToken registerConfirmationToken) {
         this.registerConfirmationTokenManager.delete(registerConfirmationToken);
     }
+
+    public RegisterConfirmationToken saveToken(final RegisterConfirmationToken token) {
+        return this.registerConfirmationTokenManager.save(token);
+    }
 }

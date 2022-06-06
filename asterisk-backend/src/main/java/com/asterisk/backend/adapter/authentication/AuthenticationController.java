@@ -1,9 +1,7 @@
 package com.asterisk.backend.adapter.authentication;
 
 import com.asterisk.backend.adapter.ResponseDto;
-import com.asterisk.backend.adapter.authentication.model.LoginRequestDto;
-import com.asterisk.backend.adapter.authentication.model.RegisterConfirmRequestDto;
-import com.asterisk.backend.adapter.authentication.model.RegisterRequestDto;
+import com.asterisk.backend.adapter.authentication.model.*;
 import com.asterisk.backend.application.security.jwt.JwtHelper;
 import com.asterisk.backend.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -46,7 +45,7 @@ public class AuthenticationController {
             final String fingerprint = this.jwtHelper.generateFingerprint();
             final String hash = this.jwtHelper.generateFingerprintHash(fingerprint);
 
-            // Getting sent along with response
+            // Prepare cookie and jwt
             final ResponseCookie cookie = this.jwtHelper.generateFingerprintCookie(fingerprint);
             final String accessJwt = this.jwtHelper.generateAccessJwt(authentication, hash);
 
@@ -80,6 +79,36 @@ public class AuthenticationController {
                                                  @Valid @RequestBody final RegisterConfirmRequestDto registerConfirmRequestDto) {
         final boolean result = this.authenticationService.confirmRegistrationOfUser(confirmationId,
                 registerConfirmRequestDto);
+        if (!result) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(value = "/register/{confirmationId}/resend-code")
+    public ResponseEntity<?> resendConfirmationCode(@PathVariable final UUID confirmationId) {
+        final boolean result = this.authenticationService.resendConfirmationCode(confirmationId);
+        if (!result) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(value = "/forgot-password")
+    public ResponseEntity<?> forgotPassword(@Valid @RequestBody final PasswordForgetRequestDto passwordForgetRequestDto) {
+        final Optional<UUID> forgotPasswordTokenId = this.authenticationService.generateForgotPasswordToken(passwordForgetRequestDto);
+        if (forgotPasswordTokenId.isEmpty()) return ResponseEntity.badRequest().build();
+
+        final ResponseDto responseDto = new ResponseDto("Password reset link sent.", forgotPasswordTokenId.get());
+        return ResponseEntity.ok(responseDto);
+
+
+    }
+
+    @PostMapping(value = "/forgot-password/{tokenId}/reset")
+    public ResponseEntity<?> resetForgottenPassword(@PathVariable final UUID tokenId,
+                                                    @Valid @RequestBody final PasswordChangeRequestDto passwordChangeRequestDto) {
+        final boolean result = this.authenticationService.resetPassword(tokenId, passwordChangeRequestDto);
         if (!result) {
             return ResponseEntity.badRequest().build();
         }

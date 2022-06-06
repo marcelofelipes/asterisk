@@ -43,9 +43,12 @@ Anyone can access these endpoints. Even unauthenticated users.
 * ``/auth/login`` attempts to authenticate the email and password 
 * ``/auth/register`` registers a new user and sends a confirmation email
 * ``/auth/register/{id}/confirm`` confirms the confirmation email by entering a code
+* ``/auth/forgot-password`` generates a new token to reset password
+* ``/auth/forgot-password/{id}/reset`` resets the users password
 
 ### Protected
 Only authenticated and authorized users have access to these endpoints.
 * ``/auth/logout`` - only authenticated users should be able to logout
 * ``/user/{id}`` -  reads information about user ``id``
+* ``/user/{id}/change-password`` changes the password of a user
 

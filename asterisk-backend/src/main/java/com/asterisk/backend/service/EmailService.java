@@ -14,6 +14,7 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 @Service
 public class EmailService {
@@ -29,7 +30,7 @@ public class EmailService {
     }
 
     @Async
-    public void sendRegisterConfirmationEmail(final User user, final String registerConfirmationToken) {
+    public void sendRegisterConfirmationEmail(final User user, final String confirmationCode) {
 
         // setup
         try {
@@ -40,7 +41,7 @@ public class EmailService {
             // set context
             final Context context = new Context();
             context.setVariable("username", user.getUsername());
-            context.setVariable("code", registerConfirmationToken);
+            context.setVariable("code", confirmationCode);
 
             // get html
             final String html = this.springTemplateEngine.process("register-confirmation-email", context);
@@ -58,7 +59,7 @@ public class EmailService {
     }
 
     @Async
-    public void sendForgotPasswordEmail(final User user, final String link) {
+    public void sendForgotPasswordEmail(final User user, final UUID forgotPasswordTokenId) {
         try {
             // setup
             final MimeMessage message = this.javaMailSender.createMimeMessage();
@@ -67,9 +68,11 @@ public class EmailService {
                     StandardCharsets.UTF_8.name());
 
             // set context
+            final String passwordResetLink = String.format("http://localhost:4200/forgot-password/reset?_fpid=%s",
+                    forgotPasswordTokenId);
             final Context context = new Context();
             context.setVariable("username", user.getUsername());
-            context.setVariable("link", link);
+            context.setVariable("link", passwordResetLink);
 
             // get html
             final String html = this.springTemplateEngine.process("forgot-password-email", context);

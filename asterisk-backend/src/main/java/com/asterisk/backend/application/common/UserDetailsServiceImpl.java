@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserManager userManager;
@@ -19,10 +21,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-        final User user = this.userManager.findUserByEmail(username);
-        if (user == null) {
+        try {
+            final User user = this.userManager.findUserByEmail(username);
+            return UserDetailsImpl.of(user);
+        } catch (final EntityNotFoundException e) {
             throw new UsernameNotFoundException("Did not find User for email: " + username);
         }
-        return UserDetailsImpl.of(user);
     }
 }
