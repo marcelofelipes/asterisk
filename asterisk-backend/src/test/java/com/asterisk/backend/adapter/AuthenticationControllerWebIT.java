@@ -1,6 +1,7 @@
 package com.asterisk.backend.adapter;
 
 import com.asterisk.backend._integration.WebIntegrationTest;
+import com.asterisk.backend._integration.authentication.WithFakeAsteriskUser;
 import com.asterisk.backend.adapter.authentication.AuthenticationController;
 import com.asterisk.backend.adapter.authentication.model.LoginRequestDto;
 import com.asterisk.backend.application.common.UserDetailsImpl;
@@ -28,6 +29,7 @@ import java.util.Collections;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import static com.asterisk.backend.adapter.UserControllerWebIT.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -92,5 +94,24 @@ public class AuthenticationControllerWebIT extends WebIntegrationTest {
         // THEN
         assertThat(result.getResponse().getStatus()).isEqualTo(200);
         assertThat(result.getResponse().getHeader("Set-Cookie")).isNotNull();
+    }
+
+    @Test
+    @WithFakeAsteriskUser(id = USER_ID)
+    public void testLogoutSuccessful() throws Exception {
+        // WHEN
+        final MvcResult result = this.mvc.perform(post("/auth/logout")).andReturn();
+
+        // THEN
+        assertThat(result.getResponse().getStatus()).isEqualTo(200);
+    }
+
+    @Test
+    public void testLogoutUnauthorized() throws Exception {
+        // WHEN
+        final MvcResult result = this.mvc.perform(post("/auth/logout")).andReturn();
+
+        // THEN
+        assertThat(result.getResponse().getStatus()).isEqualTo(401);
     }
 }

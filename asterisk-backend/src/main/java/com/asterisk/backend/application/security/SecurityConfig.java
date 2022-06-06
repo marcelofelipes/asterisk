@@ -60,8 +60,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(AUTH, HEALTHCHECK, FAVICON).permitAll()
                 .antMatchers(LOGOUT).authenticated()
+                .antMatchers(AUTH, HEALTHCHECK, FAVICON).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()
@@ -77,7 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(final AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(this.daoAuthenticationProvider());
     }
 
