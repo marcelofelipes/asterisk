@@ -23,7 +23,8 @@ This approach is directly taken from the [OWASP JWT Cheat Sheet](https://cheatsh
 ## Setup
 For your computer to be able to run this application you need to have maven and java 17 and postgresql installed.
 
-Once this is done go ahead and edit the ``application.properties`` file inside ``/src/main/java/resources``. Once you configured the database and email connections you are good to go.
+Once this is done go ahead and edit the ``application.properties`` file inside ``/src/main/java/resources``.
+Also don't forget to update the ``docker-compose.yaml`` with those same credentials.
 
 ## Architecture
 Throughout the backend the **D**omain **D**riven **D**esign (DDD) architecture is used.

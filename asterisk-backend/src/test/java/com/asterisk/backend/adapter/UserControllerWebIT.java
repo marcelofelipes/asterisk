@@ -65,6 +65,22 @@ public class UserControllerWebIT extends WebIntegrationTest {
 
     @Test
     @WithFakeAsteriskUser(id = USER_ID)
+    public void testReadUserForbidden() throws Exception {
+        // GIVEN
+        final UUID id = UUID.randomUUID();
+        final UserTestFactory userTestFactory = new UserTestFactory().setId(id);
+        when(this.userService.readUser(id)).thenReturn(userTestFactory.newDomainUser());
+
+        // WHEN
+        final MvcResult result = this.mvc.perform(get("/user/" + id))
+                .andReturn();
+
+        // THEN
+        assertThat(result.getResponse().getStatus()).isEqualTo(HttpStatus.FORBIDDEN.value());
+    }
+
+    @Test
+    @WithFakeAsteriskUser(id = USER_ID)
     public void testReadUserSuccess() throws Exception {
         // GIVEN
         final UUID id = UUID.fromString(USER_ID);

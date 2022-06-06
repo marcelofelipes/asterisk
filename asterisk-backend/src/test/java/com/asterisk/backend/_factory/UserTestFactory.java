@@ -1,5 +1,6 @@
 package com.asterisk.backend._factory;
 
+import com.asterisk.backend.adapter.authentication.model.RegisterRequestDto;
 import com.asterisk.backend.adapter.user.model.UserResponseDto;
 import com.asterisk.backend.domain.User;
 import com.asterisk.backend.store.user.UserEntity;
@@ -50,6 +51,11 @@ public class UserTestFactory {
                 this.updated);
     }
 
+    public RegisterRequestDto newRegisterRequestDto() {
+        return new RegisterRequestDto(this.firstName, this.lastName, this.email,
+                this.username, this.password);
+    }
+
     public UserTestFactory setId(final UUID id) {
         this.id = id;
         return this;
@@ -62,6 +68,16 @@ public class UserTestFactory {
 
     public UserTestFactory setEmail(final String email) {
         this.email = email;
+        return this;
+    }
+
+    public UserTestFactory setEnabled(final boolean enabled) {
+        this.enabled = enabled;
+        return this;
+    }
+
+    public UserTestFactory setUsername(final String username) {
+        this.username = username;
         return this;
     }
 }

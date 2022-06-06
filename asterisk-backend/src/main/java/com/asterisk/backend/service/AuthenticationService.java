@@ -90,7 +90,7 @@ public class AuthenticationService {
         }
 
         // Check for token matches
-        if (!registerConfirmationToken.codeMatches(registerConfirmationToken.getConfirmationCode())) {
+        if (!registerConfirmationToken.codeMatches(registerConfirmRequestDto.code())) {
             return false;
         }
 

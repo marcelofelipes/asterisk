@@ -91,5 +91,6 @@ public class AuthenticationControllerWebIT extends WebIntegrationTest {
 
         // THEN
         assertThat(result.getResponse().getStatus()).isEqualTo(200);
+        assertThat(result.getResponse().getHeader("Set-Cookie")).isNotNull();
     }
 }

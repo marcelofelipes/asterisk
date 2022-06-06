@@ -36,6 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String AUTH = "/auth/**";
     private static final String LOGOUT = "/auth/logout";
     private static final String HEALTHCHECK = "/healthcheck";
+    private static final String FAVICON = "/favicon.ico";
 
     private final AccessTokenFilter accessTokenFilter;
     private final UnauthorizedErrorHandler unauthorizedErrorHandler;
@@ -59,9 +60,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(AUTH).permitAll()
+                .antMatchers(AUTH, HEALTHCHECK, FAVICON).permitAll()
                 .antMatchers(LOGOUT).authenticated()
-                .antMatchers(HEALTHCHECK).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()

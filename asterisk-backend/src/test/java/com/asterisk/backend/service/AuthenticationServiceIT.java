@@ -3,20 +3,40 @@ package com.asterisk.backend.service;
 import com.asterisk.backend._factory.UserTestFactory;
 import com.asterisk.backend._integration.IntegrationTest;
 import com.asterisk.backend.adapter.authentication.model.LoginRequestDto;
+import com.asterisk.backend.adapter.authentication.model.RegisterConfirmRequestDto;
+import com.asterisk.backend.adapter.authentication.model.RegisterRequestDto;
+import com.asterisk.backend.domain.User;
+import com.asterisk.backend.infrastructure.ConfirmationCodeUtil;
 import com.asterisk.backend.store.user.UserEntity;
 import com.asterisk.backend.store.user.UserRepository;
+import com.asterisk.backend.store.user.confirmation.RegisterConfirmationTokenEntity;
+import com.asterisk.backend.store.user.confirmation.RegisterConfirmationTokenRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Stream;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 public class AuthenticationServiceIT extends IntegrationTest {
 
     private static final String PASSWORD = "passwordpassword";
+    private static final String EMAIL = "john@doe.com";
 
     @Autowired
     private AuthenticationService authenticationService;
@@ -24,11 +44,17 @@ public class AuthenticationServiceIT extends IntegrationTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private RegisterConfirmationTokenRepository registerConfirmationTokenRepository;
+
     @MockBean
     private EmailService emailService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Captor
+    private ArgumentCaptor<String> confirmationCodeCaptor;
 
     private UserEntity enabledUser;
 
@@ -36,6 +62,7 @@ public class AuthenticationServiceIT extends IntegrationTest {
     @Override
     public void setUp() {
         final UserEntity enabledUserEntity = new UserTestFactory()
+                .setEmail(EMAIL)
                 .setPassword(this.passwordEncoder.encode(PASSWORD))
                 .newUserEntity();
 
@@ -52,5 +79,140 @@ public class AuthenticationServiceIT extends IntegrationTest {
 
         // THEN
         assertThat(authentication).isNotNull();
+    }
+
+    @Test
+    public void testLoginUserNotEnabled() {
+        // GIVEN
+        UserEntity disabledUser = new UserTestFactory()
+                .setEmail("bla@blub.com")
+                .setUsername("blablub")
+                .setEnabled(false)
+                .setPassword(this.passwordEncoder.encode(PASSWORD))
+                .newUserEntity();
+        disabledUser = this.userRepository.save(disabledUser);
+        final LoginRequestDto loginRequestDto = new LoginRequestDto(disabledUser.getEmail(), PASSWORD);
+
+        // WHEN - THEN
+        assertThrows(DisabledException.class, () -> this.authenticationService.authenticate(loginRequestDto));
+    }
+
+    private static Stream<Arguments> loginCredentials() {
+        return Stream.of(
+                Arguments.of(EMAIL, "wrongpassword"),
+                Arguments.of("wrong@email.com", PASSWORD)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("loginCredentials")
+    public void testLoginBadCredentials(final String email, final String password) {
+        // GIVEN
+        final LoginRequestDto loginRequestDto = new LoginRequestDto(email, password);
+
+        // WHEN - THEN
+        assertThrows(BadCredentialsException.class, () -> this.authenticationService.authenticate(loginRequestDto));
+    }
+
+    @Test
+    public void testRegisterUserSuccess() {
+        // GIVEN - WHEN
+        final UUID confirmationId = this.assertRegisterSuccess();
+
+        // THEN
+        final Optional<RegisterConfirmationTokenEntity> confirmationTokenEntity =
+                this.registerConfirmationTokenRepository.findById(confirmationId);
+        assertThat(confirmationTokenEntity).isPresent();
+
+        final RegisterConfirmationTokenEntity entity = confirmationTokenEntity.get();
+
+        assertThat(confirmationId).isEqualTo(entity.getId());
+        assertThat(this.confirmationCodeCaptor.getValue()).isEqualTo(entity.getCode());
+    }
+
+    @Test
+    public void testConfirmRegistrationSuccess() {
+        // First part - registering an account
+        final UUID confirmationId = this.assertRegisterSuccess();
+
+        final RegisterConfirmationTokenEntity entity = this.registerConfirmationTokenRepository.getById(confirmationId);
+        UserEntity user = entity.getUser();
+
+        // Second part - confirming the newly registered account
+        // GIVEN
+        final RegisterConfirmRequestDto registerConfirmRequestDto =
+                new RegisterConfirmRequestDto(this.confirmationCodeCaptor.getValue());
+
+        // WHEN
+        final boolean result = this.authenticationService.confirmRegistrationOfUser(confirmationId,
+                registerConfirmRequestDto);
+
+        // THEN
+        assertThat(result).isTrue();
+
+        user = this.userRepository.getById(user.getId());
+        assertThat(user.isEnabled()).isTrue();
+
+        final Optional<RegisterConfirmationTokenEntity> tokenEntity =
+                this.registerConfirmationTokenRepository.findById(confirmationId);
+        assertThat(tokenEntity).isEmpty();
+    }
+
+    @Test
+    public void testConfirmRegistrationTokenExpired() throws InterruptedException {
+        // First part - registering an account
+        final UUID confirmationId = this.assertRegisterSuccess();
+
+        // GIVEN
+        final RegisterConfirmRequestDto registerConfirmRequestDto =
+                new RegisterConfirmRequestDto(this.confirmationCodeCaptor.getValue());
+
+        Thread.sleep(this.tokenProperties.getRegisterConfirmationExpiration() * 1000);
+
+        // WHEN
+        final boolean result = this.authenticationService.confirmRegistrationOfUser(confirmationId,
+                registerConfirmRequestDto);
+
+        // THEN
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    public void testConfirmRegistrationNoCodeMatch() {
+        // First part - registering an account
+        final UUID confirmationId = this.assertRegisterSuccess();
+
+        // GIVEN
+        final RegisterConfirmRequestDto registerConfirmRequestDto =
+                new RegisterConfirmRequestDto(ConfirmationCodeUtil.generateRegisterConfirmationCode());
+
+        // WHEN
+        final boolean result = this.authenticationService.confirmRegistrationOfUser(confirmationId,
+                registerConfirmRequestDto);
+
+        // THEN
+        assertThat(result).isFalse();
+    }
+
+    /**
+     * Performs a successful registration
+     *
+     * @return confirmation id of the token generated
+     */
+    private UUID assertRegisterSuccess() {
+        // GIVEN
+        final UserTestFactory userTestFactory = new UserTestFactory()
+                .setEmail("foo@foos.com")
+                .setUsername("foooooo");
+        final RegisterRequestDto registerRequestDto = userTestFactory.newRegisterRequestDto();
+
+        // WHEN
+        final UUID confirmationId = this.authenticationService.registerNewUser(registerRequestDto);
+
+        // THEN
+        verify(this.emailService, times(1)).sendRegisterConfirmationEmail(any(User.class),
+                this.confirmationCodeCaptor.capture());
+
+        return confirmationId;
     }
 }
