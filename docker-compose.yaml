@@ -12,11 +12,14 @@ services:
     container_name: backend
     depends_on:
       - database
+      - redis-cache
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/<YOUR-DATABASE>
       - SPRING_DATASOURCE_USERNAME=<YOUR-DATABASE-USER>
       - SPRING_DATASOURCE_PASSWORD=<YOUR-DATABASE-PASSWORD>
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_REDIS_HOST=redis-cache
+      - SPRING_REDIS_PORT=6379
     networks:
       - backend
       - frontend
@@ -26,7 +29,7 @@ services:
     restart: always
     image: 'asterisk-frontend'
     ports:
-      - '80:80'
+      - "80:80"
     build:
       context: asterisk-frontend/
     container_name: frontend
@@ -50,6 +53,17 @@ services:
       - pgdata:/var/lib/postgresql/data
     networks:
       - backend
+
+  # Redis cache service
+  redis-cache:
+    restart: always
+    image: 'redis'
+    ports:
+      - "6379:6379"
+    container_name: redis-cache
+    networks:
+      - backend
+
 
 # Volumes
 volumes:
