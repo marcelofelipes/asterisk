@@ -20,4 +20,5 @@ This project is structured in the following way:
 * ``/documentation`` contains images used in README
 
 ## Docker
-The backend is dockerized. Run ``docker compose up --build`` to execute the postgresql and spring boot containers.
+The backend is dockerized. Run ``docker compose up --build`` to execute the postgresql, angular website and spring boot backend containers.
+To verify everything is working visit http://localhost:8080/healthcheck (backend) and http://localhost:80/ (frontend)
