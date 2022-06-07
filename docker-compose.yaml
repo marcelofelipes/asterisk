@@ -1,32 +1,61 @@
 version: '2'
 services:
-  app:
+
+  # Spring Boot backend service
+  backend:
     restart: always
     image: 'asterisk-backend'
     build:
       context: asterisk-backend/
     ports:
       - "8080:8080"
-    container_name: app
+    container_name: backend
     depends_on:
-      - db
+      - database
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/<YOUR-DATABASE>
       - SPRING_DATASOURCE_USERNAME=<YOUR-DATABASE-USER>
       - SPRING_DATASOURCE_PASSWORD=<YOUR-DATABASE-PASSWORD>
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    networks:
+      - backend
+      - frontend
 
-  db:
+  # Angular website app service
+  frontend:
+    restart: always
+    image: 'asterisk-frontend'
+    ports:
+      - '80:80'
+    build:
+      context: asterisk-frontend/
+    container_name: frontend
+    depends_on:
+      - backend
+    networks:
+      - frontend
+
+  # Postgresql database service
+  database:
     restart: always
     image: 'postgres:13.1-alpine'
     ports:
       - "5432:5432"
-    container_name: db
+    container_name: database
     environment:
       - POSTGRES_USER=<YOUR-DATABASE-USER>
       - POSTGRES_PASSWORD=<YOUR-DATABASE-PASSWORD>
       - POSTGRES_DB=<YOUR-DATABASE>
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend
+
+# Volumes
 volumes:
   pgdata:
+
+# Networks to be created to facilitate communication between containers
+networks:
+  backend:
+  frontend:
