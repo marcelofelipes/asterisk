@@ -41,6 +41,7 @@ In general routes can be differentiated in three different categories:
 Anyone can access these endpoints. Even unauthenticated users.
 
 * ``/healthcheck`` exposes simple health information about the application
+* ``/version`` exposes version information
 * ``/auth/login`` attempts to authenticate the email and password 
 * ``/auth/register`` registers a new user and sends a confirmation email
 * ``/auth/register/{id}/confirm`` confirms the confirmation email by entering a code
@@ -50,6 +51,7 @@ Anyone can access these endpoints. Even unauthenticated users.
 ### Protected
 Only authenticated and authorized users have access to these endpoints.
 * ``/auth/logout`` - only authenticated users should be able to logout
-* ``/user/{id}`` -  reads information about user ``id``
+* ``GET /user/{id}`` -  reads information about user ``id``
+* ``PUT /user/{id}`` -  updates information about user ``id``
 * ``/user/{id}/change-password`` changes the password of a user
 
