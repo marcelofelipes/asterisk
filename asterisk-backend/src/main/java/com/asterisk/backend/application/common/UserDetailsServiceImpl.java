@@ -1,6 +1,7 @@
 package com.asterisk.backend.application.common;
 
 import com.asterisk.backend.domain.User;
+import com.asterisk.backend.infrastructure.exception.UserNotFoundException;
 import com.asterisk.backend.store.user.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +25,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         try {
             final User user = this.userManager.findUserByEmail(username);
             return UserDetailsImpl.of(user);
-        } catch (final EntityNotFoundException e) {
+        } catch (final UserNotFoundException e) {
             throw new UsernameNotFoundException("Did not find User for email: " + username);
         }
     }

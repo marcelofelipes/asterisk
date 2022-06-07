@@ -21,6 +21,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -69,7 +70,7 @@ public class UserControllerWebIT extends WebIntegrationTest {
         // GIVEN
         final UUID id = UUID.randomUUID();
         final UserTestFactory userTestFactory = new UserTestFactory().setId(id);
-        when(this.userService.readUser(id)).thenReturn(userTestFactory.newDomainUser());
+        when(this.userService.readUser(id)).thenReturn(Optional.ofNullable(userTestFactory.newDomainUser()));
 
         // WHEN
         final MvcResult result = this.mvc.perform(get("/user/" + id))
@@ -85,7 +86,7 @@ public class UserControllerWebIT extends WebIntegrationTest {
         // GIVEN
         final UUID id = UUID.fromString(USER_ID);
         final UserTestFactory userTestFactory = new UserTestFactory().setId(id);
-        when(this.userService.readUser(id)).thenReturn(userTestFactory.newDomainUser());
+        when(this.userService.readUser(id)).thenReturn(Optional.ofNullable(userTestFactory.newDomainUser()));
 
         // WHEN
         final MvcResult result = this.mvc.perform(get("/user/" + USER_ID))

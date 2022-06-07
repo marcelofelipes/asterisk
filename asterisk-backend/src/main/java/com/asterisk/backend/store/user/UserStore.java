@@ -1,16 +1,22 @@
 package com.asterisk.backend.store.user;
 
 import com.asterisk.backend.domain.User;
+import com.asterisk.backend.infrastructure.exception.UserNotFoundException;
 import com.asterisk.backend.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.asterisk.backend.application.config.CacheConfig.AUTHENTICATION_CACHE;
+
 @Component
-public class UserStore implements UserManager{
+@Caching
+public class UserStore implements UserManager {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -22,10 +28,10 @@ public class UserStore implements UserManager{
     }
 
     @Override
-    public User findUserByEmail(final String email) {
+    public User findUserByEmail(final String email) throws UserNotFoundException{
         final Optional<UserEntity> userEntity = this.userRepository.findByEmail(email);
 
-        if (userEntity.isEmpty()) throw new EntityNotFoundException();
+        if (userEntity.isEmpty()) throw new UserNotFoundException();
 
         return this.userMapper.toUser(userEntity.get());
     }
@@ -39,10 +45,11 @@ public class UserStore implements UserManager{
     }
 
     @Override
-    public User findUserById(final UUID userId) {
+    @Cacheable(value = AUTHENTICATION_CACHE, key = "#userId")
+    public User findUserById(final UUID userId) throws UserNotFoundException {
         final Optional<UserEntity> userEntity = this.userRepository.findById(userId);
 
-        if (userEntity.isEmpty()) throw new EntityNotFoundException();
+        if (userEntity.isEmpty()) throw new UserNotFoundException();
 
         return this.userMapper.toUser(userEntity.get());
     }

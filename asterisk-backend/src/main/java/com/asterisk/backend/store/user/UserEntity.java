@@ -36,13 +36,18 @@ public class UserEntity extends Timestamp {
     @Column(name = "enabled", nullable = false)
     private boolean enabled;
 
-    public UserEntity(final String firstName, final String lastName, final String username, final String email, final String password) {
+    @Column(name = "phone", nullable = false)
+    private String phone;
+
+    public UserEntity(final String firstName, final String lastName, final String username, final String email,
+                      final String password, final String phone) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.email = email;
         this.password = password;
         this.enabled = false;
+        this.phone = phone;
     }
 
     public UserEntity() {
@@ -104,16 +109,24 @@ public class UserEntity extends Timestamp {
         this.enabled = enabled;
     }
 
+    public String getPhone() {
+        return this.phone;
+    }
+
+    public void setPhone(final String phone) {
+        this.phone = phone;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || this.getClass() != o.getClass()) return false;
         final UserEntity user = (UserEntity) o;
-        return this.enabled == user.enabled && Objects.equals(this.id, user.id) && Objects.equals(this.firstName, user.firstName) && Objects.equals(this.lastName, user.lastName) && Objects.equals(this.username, user.username) && Objects.equals(this.email, user.email) && Objects.equals(this.password, user.password);
+        return this.enabled == user.enabled && Objects.equals(this.id, user.id) && Objects.equals(this.firstName, user.firstName) && Objects.equals(this.lastName, user.lastName) && Objects.equals(this.username, user.username) && Objects.equals(this.email, user.email) && Objects.equals(this.password, user.password) && this.phone.equals(user.phone);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id, this.firstName, this.lastName, this.username, this.email, this.password, this.enabled);
+        return Objects.hash(this.id, this.firstName, this.lastName, this.username, this.email, this.password, this.enabled, this.phone);
     }
 }

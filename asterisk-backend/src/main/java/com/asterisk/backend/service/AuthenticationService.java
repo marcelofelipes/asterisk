@@ -12,7 +12,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -154,17 +153,14 @@ public class AuthenticationService {
      * @return
      */
     public Optional<UUID> generateForgotPasswordToken(final PasswordForgetRequestDto passwordForgetRequestDto) {
-        try {
-            final User user = this.userService.findByEmail(passwordForgetRequestDto.email());
+        final Optional<User> userOptional = this.userService.findByEmail(passwordForgetRequestDto.email());
 
-            final ForgotPasswordToken forgotPasswordToken = this.forgotPasswordService.createToken(user);
+        if (userOptional.isEmpty()) return Optional.empty();
 
-            this.emailService.sendForgotPasswordEmail(user, forgotPasswordToken.getId());
+        final ForgotPasswordToken forgotPasswordToken = this.forgotPasswordService.createToken(userOptional.get());
+        this.emailService.sendForgotPasswordEmail(userOptional.get(), forgotPasswordToken.getId());
+        return Optional.of(forgotPasswordToken.getId());
 
-            return Optional.of(forgotPasswordToken.getId());
-        } catch (final EntityNotFoundException e) {
-            return Optional.empty();
-        }
     }
 
     /**

@@ -15,6 +15,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,14 +48,28 @@ public class UserServiceIT extends IntegrationTest {
         user = this.userRepository.save(user);
 
         // WHEN
-        final User domainUser = this.userService.readUser(user.getId());
+        final Optional<User> domainUser = this.userService.readUser(user.getId());
 
         // THEN
-        assertThat(domainUser).isNotNull();
-        assertThat(domainUser)
+        assertThat(domainUser).isPresent();
+        assertThat(domainUser.get())
                 .usingRecursiveComparison()
                 .ignoringFields("createdAt", "updatedAt")
                 .isEqualTo(user);
+    }
+
+    @Test
+    public void testReadUserNotFound() {
+        // GIVEN
+        final UserTestFactory userTestFactory = new UserTestFactory();
+        UserEntity user = userTestFactory.newUserEntity();
+        user = this.userRepository.save(user);
+
+        // WHEN
+        final Optional<User> domainUser = this.userService.readUser(UUID.randomUUID());
+
+        // THEN
+        assertThat(domainUser).isEmpty();
     }
 
     private static Stream<Arguments> changePasswordRequests() {

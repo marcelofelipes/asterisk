@@ -1,13 +1,34 @@
 package com.asterisk.backend.store.user;
 
 import com.asterisk.backend.domain.User;
+import com.asterisk.backend.infrastructure.exception.UserNotFoundException;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.UUID;
 
 public interface UserManager {
-    User findUserByEmail(String email);
 
+    /**
+     * Attempts to find a {@code User} for a given {@code email}
+     * @param email email of the user to find
+     * @return {@code User} for {@code email}
+     * @throws UserNotFoundException if no {@code User} is found
+     */
+    User findUserByEmail(String email) throws UserNotFoundException;
+
+    /**
+     * Saves a given {@code User}
+     * @param user to save
+     * @return the updated {@code User instance}
+     */
     User save(User user);
 
-    User findUserById(UUID userId);
+    /**
+     * Attempts to find a {@code User} for a given {@code userId}
+     *
+     * @param userId id of the user to find
+     * @return {@code User} for {@code userId}
+     * @throws UserNotFoundException if no {@code User} is found
+     */
+    User findUserById(UUID userId) throws UserNotFoundException;
 }

@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,12 +35,12 @@ public class UserSecurityTest {
 
     @Test
     @WithFakeAsteriskUser(id = USER_ID)
-    public void testIsAccountOwnerValid() {
+    public void testIsAccountOwnerSuccess() {
         // GIVEN
         final UUID id = UUID.fromString(USER_ID);
         final User user = new UserTestFactory().setId(id).newDomainUser();
 
-        when(this.userService.readUser(id)).thenReturn(user);
+        when(this.userService.readUser(id)).thenReturn(Optional.of(user));
 
         // WHEN
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -51,15 +52,31 @@ public class UserSecurityTest {
 
     @Test
     @WithFakeAsteriskUser(id = USER_ID)
-    public void testIsAccountOwnerInvalid() {
+    public void testIsAccountOwnerUnsuccessful() {
         // GIVEN
         final User user = new UserTestFactory().newDomainUser();
 
-        when(this.userService.readUser(user.getId())).thenReturn(user);
+        when(this.userService.readUser(user.getId())).thenReturn(Optional.of(user));
 
         // WHEN
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         final boolean result = this.userSecurity.isAccountOwner(authentication, user.getId());
+
+        // THEN
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    @WithFakeAsteriskUser(id = USER_ID)
+    public void testIsAccountOwnerUserNotFound() {
+        // GIVEN
+        final User user = new UserTestFactory().newDomainUser();
+
+        when(this.userService.readUser(user.getId())).thenReturn(Optional.of(user));
+
+        // WHEN
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        final boolean result = this.userSecurity.isAccountOwner(authentication, UUID.randomUUID());
 
         // THEN
         assertThat(result).isFalse();

@@ -3,6 +3,7 @@ package com.asterisk.backend.adapter.user;
 import com.asterisk.backend.adapter.authentication.model.PasswordChangeRequestDto;
 import com.asterisk.backend.adapter.user.model.UserChangeRequestDto;
 import com.asterisk.backend.adapter.user.model.UserResponseDto;
+import com.asterisk.backend.domain.User;
 import com.asterisk.backend.mapper.UserMapper;
 import com.asterisk.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -29,7 +31,11 @@ public class UserController {
     @GetMapping(value = "/{userId}")
     @PreAuthorize("@userSecurity.isAccountOwner(authentication, #userId)")
     public ResponseEntity<?> readUser(@PathVariable final UUID userId) {
-        final UserResponseDto userResponseDto = this.userMapper.toUserResponseDto(this.userService.readUser(userId));
+        final Optional<User> result = this.userService.readUser(userId);
+
+        if (result.isEmpty()) return ResponseEntity.notFound().build();
+
+        final UserResponseDto userResponseDto = this.userMapper.toUserResponseDto(result.get());
         return ResponseEntity.ok(userResponseDto);
     }
 
@@ -37,7 +43,10 @@ public class UserController {
     @PreAuthorize("@userSecurity.isAccountOwner(authentication, #userId)")
     public ResponseEntity<?> updateUser(@PathVariable final UUID userId,
                                         @Valid @RequestBody final UserChangeRequestDto userChangeRequestDto) {
-        this.userService.updateUser(userId, userChangeRequestDto);
+        final boolean result = this.userService.updateUser(userId, userChangeRequestDto);
+        if (!result) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok().build();
     }
 

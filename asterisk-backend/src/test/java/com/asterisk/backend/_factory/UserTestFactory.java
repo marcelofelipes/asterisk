@@ -16,6 +16,7 @@ public class UserTestFactory {
     private String username = "johndoe";
     private String email = "john@doe.com";
     private String password = "passwordpassword";
+    private String phone = "0711 41 42 02";
     private boolean enabled = true;
     private OffsetDateTime created = OffsetDateTime.now();
     private OffsetDateTime updated = OffsetDateTime.now();
@@ -29,6 +30,7 @@ public class UserTestFactory {
         user.setEmail(this.email);
         user.setPassword(this.password);
         user.setEnabled(this.enabled);
+        user.setPhone(this.phone);
 
         return user;
     }
@@ -42,18 +44,18 @@ public class UserTestFactory {
         user.setEmail(this.email);
         user.setPassword(this.password);
         user.setEnabled(this.enabled);
+        user.setPhone(this.phone);
 
         return user;
     }
 
     public UserResponseDto newUserResponseDto() {
-        return new UserResponseDto(this.id, this.firstName, this.lastName, this.username, this.email, this.created,
-                this.updated);
+        return new UserResponseDto(this.id, this.firstName, this.lastName, this.username, this.email, this.phone,
+                this.created, this.updated);
     }
 
     public RegisterRequestDto newRegisterRequestDto() {
-        return new RegisterRequestDto(this.firstName, this.lastName, this.email,
-                this.username, this.password);
+        return new RegisterRequestDto(this.firstName, this.lastName, this.email, this.username, this.password, this.phone);
     }
 
     public UserTestFactory setId(final UUID id) {

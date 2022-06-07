@@ -19,6 +19,7 @@ public class UserMapper {
         user.setEnabled(userEntity.isEnabled());
         user.setCreatedAt(userEntity.getCreatedAt());
         user.setUpdatedAt(userEntity.getUpdatedAt());
+        user.setPhone(userEntity.getPhone());
 
         return user;
     }
@@ -34,12 +35,13 @@ public class UserMapper {
         userEntity.setEnabled(user.isEnabled());
         userEntity.setCreatedAt(user.getCreatedAt());
         userEntity.setUpdatedAt(user.getUpdatedAt());
+        userEntity.setPhone(user.getPhone());
 
         return userEntity;
     }
 
     public UserResponseDto toUserResponseDto(final User user) {
         return new UserResponseDto(user.getId(), user.getFirstName(), user.getLastName(), user.getUsername(),
-                user.getEmail(), user.getCreatedAt(), user.getUpdatedAt());
+                user.getEmail(), user.getPhone(), user.getCreatedAt(), user.getUpdatedAt());
     }
 }

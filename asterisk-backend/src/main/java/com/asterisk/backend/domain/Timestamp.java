@@ -1,8 +1,9 @@
 package com.asterisk.backend.domain;
 
+import java.io.Serializable;
 import java.time.OffsetDateTime;
 
-public abstract class Timestamp {
+public abstract class Timestamp implements Serializable {
 
     protected OffsetDateTime createdAt;
     protected OffsetDateTime updatedAt;

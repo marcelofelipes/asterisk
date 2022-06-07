@@ -8,6 +8,7 @@ public record UserResponseDto(UUID id,
                               String lastName,
                               String username,
                               String email,
+                              String phone,
                               OffsetDateTime createdAt,
                               OffsetDateTime updatedAt) {
 }

@@ -30,11 +30,11 @@ public class ForgotPasswordService {
         return this.forgotPasswordTokenManager.save(forgotPasswordToken);
     }
 
-    public ForgotPasswordToken findToken(UUID tokenId) {
+    public ForgotPasswordToken findToken(final UUID tokenId) {
         return this.forgotPasswordTokenManager.findTokenById(tokenId);
     }
 
-    public void deleteToken(ForgotPasswordToken forgotPasswordToken) {
+    public void deleteToken(final ForgotPasswordToken forgotPasswordToken) {
         this.forgotPasswordTokenManager.delete(forgotPasswordToken);
     }
 }
