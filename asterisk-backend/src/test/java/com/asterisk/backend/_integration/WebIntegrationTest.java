@@ -1,10 +1,12 @@
 package com.asterisk.backend._integration;
 
 import com.asterisk.backend.application.config.TokenProperties;
+import com.asterisk.backend.application.security.SecurityConfig;
 import com.asterisk.backend.application.security.jwt.JwtProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -16,6 +18,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 
 @TestPropertySource(locations = "classpath:application-test.properties")
 @EnableConfigurationProperties(value = {JwtProperties.class, TokenProperties.class})
+@Import(SecurityConfig.class)
 public abstract class WebIntegrationTest {
 
     @Autowired
