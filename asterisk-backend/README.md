@@ -22,6 +22,7 @@ This approach is directly taken from the [OWASP JWT Cheat Sheet](https://cheatsh
 
 ## Setup
 For your computer to be able to run this application you need to have maven and java 17 and postgresql installed.
+Also caching is done using redis so you need to install it too.
 
 Once this is done go ahead and edit the ``application.properties`` file inside ``/src/main/java/resources``.
 Also don't forget to update the ``docker-compose.yaml`` with those same credentials.

@@ -9,6 +9,7 @@ A sample full stack web application using JWT. Made in Flutter + Spring Boot + A
 ## Requirements
 * Java 17
 * Maven
+* Redis
 * Flutter 3.0.1
 * Docker
 * NodeJS and npm
@@ -20,5 +21,5 @@ This project is structured in the following way:
 * ``/documentation`` contains images used in README
 
 ## Docker
-The backend is dockerized. Run ``docker compose up --build`` to execute the postgresql, angular website and spring boot backend containers.
+The whole stack is dockerized. Run ``docker compose up --build`` to execute the postgresql, redis, angular website and spring boot backend containers.
 To verify everything is working visit http://localhost:8080/healthcheck (backend) and http://localhost:80/ (frontend)
