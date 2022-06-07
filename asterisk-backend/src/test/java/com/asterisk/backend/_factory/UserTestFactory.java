@@ -80,4 +80,14 @@ public class UserTestFactory {
         this.username = username;
         return this;
     }
+
+    public UserTestFactory setFirstName(final String firstName) {
+        this.firstName = firstName;
+        return this;
+    }
+
+    public UserTestFactory setLastName(final String lastName) {
+        this.lastName = lastName;
+        return this;
+    }
 }

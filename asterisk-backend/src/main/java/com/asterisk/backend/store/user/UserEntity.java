@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity(name = "tab_user")
@@ -101,5 +102,18 @@ public class UserEntity extends Timestamp {
 
     public void setEnabled(final boolean enabled) {
         this.enabled = enabled;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        final UserEntity user = (UserEntity) o;
+        return this.enabled == user.enabled && Objects.equals(this.id, user.id) && Objects.equals(this.firstName, user.firstName) && Objects.equals(this.lastName, user.lastName) && Objects.equals(this.username, user.username) && Objects.equals(this.email, user.email) && Objects.equals(this.password, user.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.id, this.firstName, this.lastName, this.username, this.email, this.password, this.enabled);
     }
 }

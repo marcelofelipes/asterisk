@@ -1,6 +1,7 @@
 package com.asterisk.backend.adapter.user;
 
 import com.asterisk.backend.adapter.authentication.model.PasswordChangeRequestDto;
+import com.asterisk.backend.adapter.user.model.UserChangeRequestDto;
 import com.asterisk.backend.adapter.user.model.UserResponseDto;
 import com.asterisk.backend.mapper.UserMapper;
 import com.asterisk.backend.service.UserService;
@@ -30,6 +31,14 @@ public class UserController {
     public ResponseEntity<?> readUser(@PathVariable final UUID userId) {
         final UserResponseDto userResponseDto = this.userMapper.toUserResponseDto(this.userService.readUser(userId));
         return ResponseEntity.ok(userResponseDto);
+    }
+
+    @PutMapping(value = "/{userId}")
+    @PreAuthorize("@userSecurity.isAccountOwner(authentication, #userId)")
+    public ResponseEntity<?> updateUser(@PathVariable final UUID userId,
+                                        @Valid @RequestBody final UserChangeRequestDto userChangeRequestDto) {
+        this.userService.updateUser(userId, userChangeRequestDto);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping(value = "/{userId}/change-password")

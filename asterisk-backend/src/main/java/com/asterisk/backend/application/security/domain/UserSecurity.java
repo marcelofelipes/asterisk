@@ -20,10 +20,10 @@ public class UserSecurity {
     }
 
     /**
-     *
-     * @param authentication
-     * @param userId
-     * @return
+     * Checks whether the id of the current authentication principal matches the requested user
+     * @param authentication authentication
+     * @param userId requested user id
+     * @return true if both match
      */
     public boolean isAccountOwner(final Authentication authentication, final UUID userId) {
         final UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();

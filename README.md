@@ -11,10 +11,12 @@ A sample full stack web application using JWT. Made in Flutter + Spring Boot + A
 * Maven
 * Flutter 3.0.1
 * Docker
+* NodeJS and npm
 
 ## Structure
 This project is structured in the following way:
 * ``/asterisk-backend`` contains the Spring Boot backend
+* ``/asterisk/frontend`` contains a nx workspace with an angular app
 * ``/documentation`` contains images used in README
 
 ## Docker

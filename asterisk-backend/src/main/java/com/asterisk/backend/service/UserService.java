@@ -2,6 +2,7 @@ package com.asterisk.backend.service;
 
 import com.asterisk.backend.adapter.authentication.model.PasswordChangeRequestDto;
 import com.asterisk.backend.adapter.authentication.model.RegisterRequestDto;
+import com.asterisk.backend.adapter.user.model.UserChangeRequestDto;
 import com.asterisk.backend.domain.User;
 import com.asterisk.backend.store.user.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,6 @@ public class UserService {
     }
 
     /**
-     *
      * @param registerRequestDto
      * @return
      */
@@ -35,7 +35,6 @@ public class UserService {
     }
 
     /**
-     *
      * @param userId
      * @param passwordChangeRequestDto
      * @return
@@ -57,6 +56,33 @@ public class UserService {
         return true;
     }
 
+    /**
+     *
+     * @param userId
+     * @param userChangeRequestDto
+     */
+    public void updateUser(final UUID userId, final UserChangeRequestDto userChangeRequestDto) {
+        final User user = this.readUser(userId);
+
+        if (userChangeRequestDto.firstName() != null) {
+            user.setFirstName(userChangeRequestDto.firstName());
+        }
+
+        if (userChangeRequestDto.lastName() != null) {
+            user.setLastName(userChangeRequestDto.lastName());
+        }
+
+        if (userChangeRequestDto.email() != null) {
+            user.setEmail(userChangeRequestDto.email());
+        }
+
+        if (userChangeRequestDto.username() != null) {
+            user.setUsername(userChangeRequestDto.username());
+        }
+
+        this.saveUser(user);
+    }
+
     public void saveUser(final User user) {
         this.userManager.save(user);
     }
@@ -64,7 +90,8 @@ public class UserService {
     public User readUser(final UUID userId) {
         return this.userManager.findUserById(userId);
     }
-    public User findByEmail(final String email)  {
+
+    public User findByEmail(final String email) {
         return this.userManager.findUserByEmail(email);
     }
 }

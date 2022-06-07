@@ -3,9 +3,11 @@ package com.asterisk.backend.service;
 import com.asterisk.backend._factory.UserTestFactory;
 import com.asterisk.backend._integration.IntegrationTest;
 import com.asterisk.backend.adapter.authentication.model.PasswordChangeRequestDto;
+import com.asterisk.backend.adapter.user.model.UserChangeRequestDto;
 import com.asterisk.backend.domain.User;
 import com.asterisk.backend.store.user.UserEntity;
 import com.asterisk.backend.store.user.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -29,6 +31,12 @@ public class UserServiceIT extends IntegrationTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @AfterEach
+    @Override
+    public void teardown() {
+        this.userRepository.deleteAll();
+    }
 
     @Test
     public void testReadUser() {
@@ -70,5 +78,33 @@ public class UserServiceIT extends IntegrationTest {
         final boolean result = this.userService.changePassword(user.getId(), passwordChangeRequestDto);
 
         assertThat(result).isEqualTo(exResult);
+    }
+
+    @Test
+    public void testUpdateUser() {
+        // GIVEN
+        final UserTestFactory userTestFactory = new UserTestFactory()
+                .setPassword(this.passwordEncoder.encode(PASSWORD));
+        UserEntity user = userTestFactory.newUserEntity();
+        user = this.userRepository.save(user);
+
+
+        final UserChangeRequestDto userChangeRequestDto = new UserChangeRequestDto("nullios", "nullios", null, null);
+
+        // WHEN
+        this.userService.updateUser(user.getId(), userChangeRequestDto);
+
+        // THEN
+        final UserEntity expected = userTestFactory
+                .setFirstName("nullios")
+                .setLastName("nullios")
+                .newUserEntity();
+        user = this.userRepository.getById(user.getId());
+
+        assertThat(user)
+                .usingRecursiveComparison()
+                .ignoringFields("id","createdAt", "updatedAt")
+                .isEqualTo(expected);
+
     }
 }
