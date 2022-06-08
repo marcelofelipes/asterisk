@@ -33,7 +33,7 @@ public class UserService {
     public User createUser(final RegisterRequestDto registerRequestDto) {
         final User user = new User(registerRequestDto.firstName(), registerRequestDto.lastName(),
                 registerRequestDto.username(), registerRequestDto.email(),
-                this.passwordEncoder.encode(registerRequestDto.password()), registerRequestDto.phone());
+                this.passwordEncoder.encode(registerRequestDto.password()));
         return this.userManager.save(user);
     }
 

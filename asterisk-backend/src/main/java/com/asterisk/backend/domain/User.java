@@ -11,17 +11,15 @@ public class User extends Timestamp {
     private String email;
     private String password;
     private boolean enabled;
-    private String phone;
 
     public User(final String firstName, final String lastName, final String username, final String email,
-                final String password, final String phone) {
+                final String password) {
         super();
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.email = email;
         this.password = password;
-        this.phone = phone;
     }
 
     public User() {
@@ -81,13 +79,5 @@ public class User extends Timestamp {
 
     public void setEnabled(final boolean enabled) {
         this.enabled = enabled;
-    }
-
-    public String getPhone() {
-        return this.phone;
-    }
-
-    public void setPhone(final String phone) {
-        this.phone = phone;
     }
 }

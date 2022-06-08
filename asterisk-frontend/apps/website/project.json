@@ -14,8 +14,14 @@
         "polyfills": "apps/website/src/polyfills.ts",
         "tsConfig": "apps/website/tsconfig.app.json",
         "assets": ["apps/website/src/favicon.ico", "apps/website/src/assets"],
-        "styles": ["apps/website/src/styles.css"],
-        "scripts": []
+        "styles": [
+          "apps/website/src/styles.css",
+          "node_modules/bootstrap/dist/css/bootstrap.min.css"],
+        "scripts": [
+          "node_modules/jquery/dist/jquery.min.js",
+          "node_modules/@popperjs/core/dist/umd/popper.min.js",
+          "node_modules/bootstrap/dist/js/bootstrap.min.js"
+        ]
       },
       "configurations": {
         "production": {
@@ -51,6 +57,9 @@
       "defaultConfiguration": "production"
     },
     "serve": {
+      "options": {
+        "proxyConfig": "./apps/website/proxy.conf.json"
+      },
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {

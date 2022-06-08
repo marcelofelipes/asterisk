@@ -1,0 +1,50 @@
+<section class="w-100 p-4 d-flex justify-content-center pb-4" style="margin-top: 2.5%">
+  <form style="width: 22rem;" (ngSubmit)="performLogin()" [formGroup]="loginForm">
+    <h1>Login</h1>
+    <p>Sign in with your account to continue.</p>
+    <div style="margin-top: 15%">
+      <!-- Email input -->
+      <div class="form-outline mb-4">
+        <input formControlName="email" type="email" id="email-input" class="form-control">
+        <label class="form-label" for="email-input" style="margin-left: 0px;">Email address</label>
+        <div class="form-notch">
+          <div class="form-notch-leading" style="width: 9px;"></div>
+          <div class="form-notch-middle" style="width: 88.8px;"></div>
+          <div class="form-notch-trailing"></div>
+        </div>
+      </div>
+
+      <!-- Password input -->
+      <div class="form-outline mb-4">
+        <input formControlName="password" type="password" id="password-input" class="form-control">
+        <label class="form-label" for="password-input" style="margin-left: 0px;">Password</label>
+        <div class="form-notch">
+          <div class="form-notch-leading" style="width: 9px;"></div>
+          <div class="form-notch-middle" style="width: 64px;"></div>
+          <div class="form-notch-trailing"></div>
+        </div>
+      </div>
+
+      <div style="text-align: center; color: red; padding-bottom: 5px" *ngIf="errorMessage !== null">
+        <i style="color: red" class="bi bi-exclamation-circle-fill"></i>
+        {{errorMessage}}
+      </div>
+
+      <!-- 2 column grid layout for inline styling -->
+      <div class="row mb-4">
+        <div class="col">
+          <!-- Simple link -->
+          <a routerLink="/forgot-password">Forgot password?</a>
+        </div>
+      </div>
+
+      <!-- Submit button -->
+      <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+
+      <!-- Register buttons -->
+      <div class="text-center">
+        <p>No account yet? <a routerLink="/register">Register</a></p>
+      </div>
+    </div>
+  </form>
+</section>
