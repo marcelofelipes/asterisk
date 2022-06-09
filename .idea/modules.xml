@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/asterisk.iml" filepath="$PROJECT_DIR$/.idea/asterisk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/asterisk-backend/asterisk-backend.iml" filepath="$PROJECT_DIR$/asterisk-backend/asterisk-backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/asterisk-frontend/asterisk-frontend.iml" filepath="$PROJECT_DIR$/asterisk-frontend/asterisk-frontend.iml" />
+    </modules>
+  </component>
+</project>
