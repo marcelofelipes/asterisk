@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
+import {HttpClient, HttpResponse} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {BaseResponse} from "../models/base-response.model";
 import {environment} from "../../environments/environment";
@@ -70,6 +70,27 @@ export class AuthenticationService {
     return this._http.post<BaseResponse>(environment.backendUrl + `/auth/register/${cid}/resend-code`,
       {},
       {observe: 'response'});
+  }
+
+  /**
+   *
+   * @param email
+   */
+  public forgotPassword(email: string): Observable<HttpResponse<never>> {
+    return this._http.post<never>(environment.backendUrl + '/auth/forgot-password',
+      {email: email}, {observe: 'response'})
+  }
+
+  /**
+   *
+   * @param fpid
+   * @param password
+   * @param passwordConfirmation
+   */
+  public resetPassword(fpid: string, password: string, passwordConfirmation: string): Observable<HttpResponse<never>> {
+    return this._http.post<never>(environment.backendUrl + `/auth/forgot-password/${fpid}/reset`,
+      {password: password, passwordConfirmation: passwordConfirmation},
+      {observe: 'response'})
   }
 
   /**

@@ -68,7 +68,7 @@ public class EmailService {
                     StandardCharsets.UTF_8.name());
 
             // set context
-            final String passwordResetLink = String.format("http://localhost:4200/forgot-password/reset?_fpid=%s",
+            final String passwordResetLink = String.format("http://localhost:4200/forgot-password/reset?fpid=%s",
                     forgotPasswordTokenId);
             final Context context = new Context();
             context.setVariable("username", user.getUsername());
