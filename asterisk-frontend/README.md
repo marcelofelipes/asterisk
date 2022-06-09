@@ -18,4 +18,5 @@ all requests to these particular URLs ``localhost:4200/api/*`` (the frontend its
 ### Building for production
 In production however as you can see in the ``Dockerfile`` nginx is used to
 serve the build content of our angular application(s). Since we don't have a development server in production but rather nginx, the setup described
-for [Developing locally](#developing-locally) pretty much applies the same here only with port 80 instead of 4200.
+for [Developing locally](#developing-locally) pretty much applies the same here only with port 80 instead of 4200. Check the 
+``nginx-default.conf`` file for more information

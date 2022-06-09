@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <a class="navbar-brand" routerLink="/">
       <img src="assets/favicon-32x32.png" alt="The logo of the website" width="30"
-           height="30" class="d-inline-block align-text-top">    Project Asterisk
+           height="30" class="d-inline-block align-text-top"> Project Asterisk
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
             aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,7 +27,22 @@
         </li>
       </ul>
       <span class="navbar-text">
-          <button type="button" class="btn btn-primary" routerLink="/login">Login</button>
+        <button *ngIf="!_authenticationService.isLoggedIn(); else showLogout" type="button" class="btn btn-primary"
+                routerLink="/login">Login</button>
+        <ng-template #showLogout>
+          <div class="dropdown">
+           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                   data-bs-toggle="dropdown"
+                   aria-expanded="false"><i class="bi bi-person" style="padding-right: 2.5%"></i>{{this._authenticationService.getUsername()}}</button>
+              <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" routerLink="/profile"><i class="bi bi-person-circle"
+                                                                      style="padding-right: 2.5%"></i>Profile</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" routerLink="." (click)="logout()"><i class="bi bi-arrow-right-square"
+                                                                                  style="padding-right: 2.5%"></i>Logout</a></li>
+              </ul>
+          </div>
+        </ng-template>
       </span>
     </div>
   </div>

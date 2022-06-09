@@ -1,1 +1,65 @@
-<p>edit-profile works!</p>
+<section class="w-100 p-4 d-flex justify-content-center pb-4" style="margin-top: 2.5%">
+  <form style="width: 22rem;" (ngSubmit)="performEdit()" [formGroup]="editProfileForm">
+    <h1>Edit profile</h1>
+    <p>Change information about your profile.</p>
+    <hr>
+    <div style="margin-top: 15%">
+
+      <!-- First name input -->
+      <div class="form-outline mb-2">
+        <input formControlName="firstName" type="text" id="first-name-input" class="form-control">
+        <label class="form-label" for="first-name-input" style="margin-left: 0px;">First name</label>
+        <div class="form-notch">
+          <div class="form-notch-leading" style="width: 9px;"></div>
+          <div class="form-notch-middle" style="width: 88.8px;"></div>
+          <div class="form-notch-trailing"></div>
+        </div>
+      </div>
+
+      <!-- Last name input -->
+      <div class="form-outline mb-2">
+        <input formControlName="lastName" type="text" id="last-name-input" class="form-control">
+        <label class="form-label" for="last-name-input" style="margin-left: 0px;">Last name</label>
+        <div class="form-notch">
+          <div class="form-notch-leading" style="width: 9px;"></div>
+          <div class="form-notch-middle" style="width: 88.8px;"></div>
+          <div class="form-notch-trailing"></div>
+        </div>
+      </div>
+
+      <!-- Username input -->
+      <div class="form-outline mb-2">
+        <input formControlName="username" type="text" id="username-input" class="form-control">
+        <label class="form-label" for="username-input" style="margin-left: 0px;">Username</label>
+        <div class="form-notch">
+          <div class="form-notch-leading" style="width: 9px;"></div>
+          <div class="form-notch-middle" style="width: 88.8px;"></div>
+          <div class="form-notch-trailing"></div>
+        </div>
+      </div>
+
+      <div style="margin-top: 15%">
+        <!-- Email input -->
+        <div class="form-outline mb-4">
+          <input formControlName="email" type="email" id="email-input" class="form-control">
+          <label class="form-label" for="email-input" style="margin-left: 0px;">Email address</label>
+          <div class="form-notch">
+            <div class="form-notch-leading" style="width: 9px;"></div>
+            <div class="form-notch-middle" style="width: 88.8px;"></div>
+            <div class="form-notch-trailing"></div>
+          </div>
+        </div>
+
+        <div style="text-align: center; color: red; padding-bottom: 5px" *ngIf="errorMessage !== null">
+          <i style="color: red" class="bi bi-exclamation-circle-fill"></i>
+          {{errorMessage}}
+        </div>
+
+        <!-- Submit button -->
+        <button [disabled]="!editProfileForm.valid" type="submit" class="btn btn-primary btn-block mb-4">Edit</button>
+        <hr>
+
+      </div>
+    </div>
+  </form>
+</section>

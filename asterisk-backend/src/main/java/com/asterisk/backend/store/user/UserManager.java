@@ -18,6 +18,9 @@ public interface UserManager {
 
     /**
      * Saves a given {@code User}
+     *
+     * Updates the specific cache value of this user
+     *
      * @param user to save
      * @return the updated {@code User instance}
      */
@@ -25,6 +28,8 @@ public interface UserManager {
 
     /**
      * Attempts to find a {@code User} for a given {@code userId}
+     *
+     * After the user was successfully found it the object is cached for 10 minutes.
      *
      * @param userId id of the user to find
      * @return {@code User} for {@code userId}

@@ -1,1 +1,42 @@
-<p>confirm-registration works!</p>
+<section class="w-100 p-4 d-flex justify-content-center pb-4" style="margin-top: 2.5%">
+  <form style="width: 22rem;" (ngSubmit)="performConfirmation()" [formGroup]="confirmRegistrationForm">
+    <h1>Confirm your registration</h1>
+    <p>Please enter the code we just send to your email below.</p>
+    <div style="margin-top: 15%">
+      <!-- Email input -->
+      <div class="form-outline mb-4">
+        <input formControlName="code" type="text" id="code-input" class="form-control">
+        <label class="form-label" for="code-input" style="margin-left: 0px;">Confirmation code</label>
+        <div class="form-notch">
+          <div class="form-notch-leading" style="width: 9px;"></div>
+          <div class="form-notch-middle" style="width: 88.8px;"></div>
+          <div class="form-notch-trailing"></div>
+        </div>
+      </div>
+
+
+      <div style="text-align: center; color: red; padding-bottom: 5px" *ngIf="confirmationErrorMessage !== null">
+        <i style="color: red" class="bi bi-exclamation-circle-fill"></i>
+        {{confirmationErrorMessage}}
+      </div>
+
+      <!-- Register buttons -->
+      <div class="text-center">
+        <p>No code received? <button type="submit" (click)="resendCode()" class="btn btn-primary btn-block mb-4" >Send again</button></p>
+        <div style="text-align: center; color: red; padding-bottom: 5px" *ngIf="resendErrorMessage !== null">
+          <i style="color: green" class="bi bi-exclamation-circle-fill"></i>
+          {{resendErrorMessage}}
+        </div>
+
+        <div style="text-align: center; color: red; padding-bottom: 5px" *ngIf="resendMessage !== null">
+          {{resendMessage}}
+        </div>
+      </div>
+
+      <!-- Submit button -->
+      <button [disabled]="!confirmRegistrationForm.valid" type="submit" class="btn btn-primary btn-block mb-4">Confirm</button>
+
+    </div>
+  </form>
+</section>
+

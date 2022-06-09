@@ -2,6 +2,8 @@
   <form style="width: 22rem;" (ngSubmit)="performLogin()" [formGroup]="loginForm">
     <h1>Login</h1>
     <p>Sign in with your account to continue.</p>
+
+    <hr>
     <div style="margin-top: 15%">
       <!-- Email input -->
       <div class="form-outline mb-4">
@@ -39,7 +41,10 @@
       </div>
 
       <!-- Submit button -->
-      <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+      <button [disabled]="!loginForm.valid" type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+
+
+      <hr>
 
       <!-- Register buttons -->
       <div class="text-center">

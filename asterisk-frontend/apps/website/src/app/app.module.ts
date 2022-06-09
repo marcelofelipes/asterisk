@@ -17,6 +17,15 @@ import { EditProfileComponent } from './components/user/edit-profile/edit-profil
 import { ChangePasswordComponent } from './components/user/change-password/change-password.component';
 import { NavbarComponent } from './components/layout/navbar/navbar.component';
 import { AppRoutingModule } from './app-routing.module';
+import { JwtModule } from '@auth0/angular-jwt';
+import { CommonModule } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { ErrorComponent } from './components/common/error/error.component';
+
+export function tokenGetter() {
+  return localStorage.getItem('_uid');
+}
 
 @NgModule({
   declarations: [
@@ -33,10 +42,19 @@ import { AppRoutingModule } from './app-routing.module';
     EditProfileComponent,
     ChangePasswordComponent,
     NavbarComponent,
+    ErrorComponent,
   ],
   imports: [
+    CommonModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
     BrowserModule,
     HttpClientModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+      },
+    }),
     ReactiveFormsModule,
     AppRoutingModule,
   ],

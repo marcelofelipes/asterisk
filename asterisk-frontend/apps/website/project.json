@@ -6,17 +6,25 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/website",
         "index": "apps/website/src/index.html",
         "main": "apps/website/src/main.ts",
         "polyfills": "apps/website/src/polyfills.ts",
         "tsConfig": "apps/website/tsconfig.app.json",
-        "assets": ["apps/website/src/favicon.ico", "apps/website/src/assets"],
+        "assets": [
+          "apps/website/src/favicon.ico",
+          "apps/website/src/assets"
+        ],
         "styles": [
           "apps/website/src/styles.css",
-          "node_modules/bootstrap/dist/css/bootstrap.min.css"],
+          "node_modules/bootstrap/dist/css/bootstrap.min.css",
+          "node_modules/bootstrap-icons/font/bootstrap-icons.css",
+          "node_modules/ngx-toastr/toastr.css"
+        ],
         "scripts": [
           "node_modules/jquery/dist/jquery.min.js",
           "node_modules/@popperjs/core/dist/umd/popper.min.js",
@@ -88,7 +96,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/website"],
+      "outputs": [
+        "coverage/apps/website"
+      ],
       "options": {
         "jestConfig": "apps/website/jest.config.js",
         "passWithNoTests": true

@@ -12,6 +12,7 @@ import {ProfileComponent} from "./components/user/profile/profile.component";
 import {ForgotPasswordComponent} from "./components/authentication/forgot-password/forgot-password.component";
 import {EditProfileComponent} from "./components/user/edit-profile/edit-profile.component";
 import {ChangePasswordComponent} from "./components/user/change-password/change-password.component";
+import {ErrorComponent} from "./components/common/error/error.component";
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -39,6 +40,7 @@ const routes: Routes = [
       }
     ]
   },
+  {path: 'error', component: ErrorComponent},
   {path: '**', component: NotFoundComponent}
 ];
 

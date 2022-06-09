@@ -3,9 +3,17 @@
 A sample full stack web application and mobile app. Utilising Json Web Tokens (JWT) to authorized requests. Made with the (as I call it) SPARF stack. Which means
 **S**pring-Boot, **P**ostgresql, **A**ngular, **R**edis and **F**lutter.
 
+- [General](#general)
 - [Requirements](#requirements)
 - [Structure](#structure)
 - [Docker](#docker)
+
+## General
+This project is for demonstration purpose only. Feel free to clone this project and built
+on top of it the application you would like!
+
+It is recommended to use IntelliJ IDEA for development. It should automatically
+detect and import needed settings for you to get started in no time.
 
 ## Requirements
 * Java 17

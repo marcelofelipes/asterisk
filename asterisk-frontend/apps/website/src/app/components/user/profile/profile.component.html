@@ -1,1 +1,17 @@
-<p>profile works!</p>
+<h1 style="margin-top: 2.5%">Profile of {{user?.username}}</h1>
+
+<button type="button" class="btn btn-primary" routerLink="/profile/edit" >Edit profile</button>
+<button type="button" class="btn btn-primary" style="margin-left: 2.5%" routerLink="/profile/edit/change-password">Change password</button>
+
+<hr>
+
+<h3>Information</h3>
+
+<p>First name: {{user?.firstName}}</p>
+<p>Last name: {{user?.lastName}}</p>
+<p>Email: {{user?.email}}</p>
+<p>Username: {{user?.username}}</p>
+
+<p>Created at: {{user?.createdAt}}</p>
+
+<hr>

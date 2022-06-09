@@ -43,7 +43,7 @@ public class JwtHelper {
     public String generateAccessJwt(final Authentication authentication, final String fingerprintHash) {
         final UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
         final Algorithm algorithm = Algorithm.HMAC256(this.jwtProperties.getAccessSecret());
-        final Map<String, ?> payload = Map.of("email", userPrincipal.getEmail());
+        final Map<String, ?> payload = Map.of("email", userPrincipal.getEmail(), "username", userPrincipal.getUsername());
         return JWT.create()
                 .withPayload(payload)
                 .withClaim("fgp", fingerprintHash)
