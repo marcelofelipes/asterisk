@@ -25,6 +25,7 @@ detect and import needed settings for you to get started in no time.
 
 ## Structure
 This project is structured in the following way:
+* ``/asterisk-app`` contains a Flutter application
 * ``/asterisk-backend`` contains the Spring Boot backend
 * ``/asterisk/frontend`` contains a nx workspace with an angular app
 * ``/documentation`` contains images used in README
