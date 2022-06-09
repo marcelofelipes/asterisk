@@ -38,28 +38,28 @@
         </div>
       </div>
 
-      <div style="margin-top: 15%">
-        <!-- Email input -->
-        <div class="form-outline mb-4">
-          <input formControlName="email" type="email" id="email-input" class="form-control">
-          <label class="form-label" for="email-input" style="margin-left: 0px;">Email address</label>
-          <div class="form-notch">
-            <div class="form-notch-leading" style="width: 9px;"></div>
-            <div class="form-notch-middle" style="width: 88.8px;"></div>
-            <div class="form-notch-trailing"></div>
-          </div>
+
+      <!-- Email input -->
+      <div class="form-outline mb-4">
+        <input formControlName="email" type="email" id="email-input" class="form-control">
+        <label class="form-label" for="email-input" style="margin-left: 0px;">Email address</label>
+        <div class="form-notch">
+          <div class="form-notch-leading" style="width: 9px;"></div>
+          <div class="form-notch-middle" style="width: 88.8px;"></div>
+          <div class="form-notch-trailing"></div>
         </div>
-
-        <div style="text-align: center; color: red; padding-bottom: 5px" *ngIf="errorMessage !== null">
-          <i style="color: red" class="bi bi-exclamation-circle-fill"></i>
-          {{errorMessage}}
-        </div>
-
-        <!-- Submit button -->
-        <button [disabled]="!editProfileForm.valid" type="submit" class="btn btn-primary btn-block mb-4">Edit</button>
-        <hr>
-
       </div>
+
+      <div style="text-align: center; color: red; padding-bottom: 5px" *ngIf="errorMessage !== null">
+        <i style="color: red" class="bi bi-exclamation-circle-fill"></i>
+        {{errorMessage}}
+      </div>
+
+      <!-- Submit button -->
+      <button [disabled]="!editProfileForm.valid" type="submit" class="btn btn-primary btn-block mb-4">Edit</button>
+      <hr>
+
+
     </div>
   </form>
 </section>

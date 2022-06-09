@@ -29,12 +29,26 @@ export class UserService {
    * @param email
    * @param username
    */
-  public updateUser(uid: string, firstName?: string, lastName?: string, email?: string, username?: string) {
+  public updateUser(uid: string, firstName?: string, lastName?: string, email?: string, username?: string): Observable<HttpResponse<never>> {
     return this._http.put<never>(environment.backendUrl + `/user/${uid}`, {
       firstName: firstName,
       lastName: lastName,
       email: email,
       username: username,
     }, {observe: 'response'})
+  }
+
+  /**
+   *
+   * @param uid
+   * @param password
+   * @param passwordConfirmation
+   */
+  public changePassword(uid: string, password: string, passwordConfirmation: string): Observable<HttpResponse<never>> {
+    return this._http.post<never>(environment.backendUrl + `/user/${uid}/change-password`, {
+        password: password,
+        passwordConfirmation: passwordConfirmation
+      },
+      {observe: 'response'});
   }
 }
