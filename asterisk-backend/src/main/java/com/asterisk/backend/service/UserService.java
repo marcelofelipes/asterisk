@@ -34,7 +34,7 @@ public class UserService {
         final User user = new User(registerRequestDto.firstName(), registerRequestDto.lastName(),
                 registerRequestDto.username(), registerRequestDto.email(),
                 this.passwordEncoder.encode(registerRequestDto.password()));
-        return this.userManager.save(user);
+         return this.userManager.save(user);
     }
 
     /**
