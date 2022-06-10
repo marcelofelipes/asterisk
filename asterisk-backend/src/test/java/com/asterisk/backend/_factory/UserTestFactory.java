@@ -1,7 +1,7 @@
 package com.asterisk.backend._factory;
 
-import com.asterisk.backend.adapter.authentication.model.RegisterRequestDto;
-import com.asterisk.backend.adapter.user.model.UserResponseDto;
+import com.asterisk.backend.adapter.rest.authentication.model.RegisterRequestDto;
+import com.asterisk.backend.adapter.rest.user.model.UserResponseDto;
 import com.asterisk.backend.domain.User;
 import com.asterisk.backend.store.user.UserEntity;
 

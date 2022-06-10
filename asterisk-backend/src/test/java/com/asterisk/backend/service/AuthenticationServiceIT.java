@@ -2,7 +2,7 @@ package com.asterisk.backend.service;
 
 import com.asterisk.backend._factory.UserTestFactory;
 import com.asterisk.backend._integration.IntegrationTest;
-import com.asterisk.backend.adapter.authentication.model.*;
+import com.asterisk.backend.adapter.rest.authentication.model.*;
 import com.asterisk.backend.domain.User;
 import com.asterisk.backend.infrastructure.ConfirmationCodeUtil;
 import com.asterisk.backend.store.user.UserEntity;

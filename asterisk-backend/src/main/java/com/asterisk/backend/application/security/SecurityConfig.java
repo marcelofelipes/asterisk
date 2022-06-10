@@ -62,7 +62,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers(LOGOUT).authenticated()
-                .antMatchers(AUTH, HEALTHCHECK, VERSION, FAVICON).permitAll()
+                .antMatchers(AUTH, HEALTHCHECK, VERSION, FAVICON, "/ws/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()

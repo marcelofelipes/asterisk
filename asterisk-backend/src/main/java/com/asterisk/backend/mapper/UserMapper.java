@@ -1,6 +1,6 @@
 package com.asterisk.backend.mapper;
 
-import com.asterisk.backend.adapter.user.model.UserResponseDto;
+import com.asterisk.backend.adapter.rest.user.model.UserResponseDto;
 import com.asterisk.backend.domain.User;
 import com.asterisk.backend.store.user.UserEntity;
 import org.springframework.stereotype.Component;

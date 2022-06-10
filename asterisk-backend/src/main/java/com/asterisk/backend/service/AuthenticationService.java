@@ -1,6 +1,6 @@
 package com.asterisk.backend.service;
 
-import com.asterisk.backend.adapter.authentication.model.*;
+import com.asterisk.backend.adapter.rest.authentication.model.*;
 import com.asterisk.backend.domain.ForgotPasswordToken;
 import com.asterisk.backend.domain.RegisterConfirmationToken;
 import com.asterisk.backend.domain.User;

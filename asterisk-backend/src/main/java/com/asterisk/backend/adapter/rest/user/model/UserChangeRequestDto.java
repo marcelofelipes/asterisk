@@ -1,8 +1,7 @@
-package com.asterisk.backend.adapter.user.model;
+package com.asterisk.backend.adapter.rest.user.model;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**

@@ -1,8 +1,8 @@
-package com.asterisk.backend.adapter.user;
+package com.asterisk.backend.adapter.rest.user;
 
-import com.asterisk.backend.adapter.authentication.model.PasswordChangeRequestDto;
-import com.asterisk.backend.adapter.user.model.UserChangeRequestDto;
-import com.asterisk.backend.adapter.user.model.UserResponseDto;
+import com.asterisk.backend.adapter.rest.authentication.model.PasswordChangeRequestDto;
+import com.asterisk.backend.adapter.rest.user.model.UserChangeRequestDto;
+import com.asterisk.backend.adapter.rest.user.model.UserResponseDto;
 import com.asterisk.backend.domain.User;
 import com.asterisk.backend.mapper.UserMapper;
 import com.asterisk.backend.service.UserService;

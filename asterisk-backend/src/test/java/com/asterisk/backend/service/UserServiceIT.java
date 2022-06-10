@@ -2,8 +2,8 @@ package com.asterisk.backend.service;
 
 import com.asterisk.backend._factory.UserTestFactory;
 import com.asterisk.backend._integration.IntegrationTest;
-import com.asterisk.backend.adapter.authentication.model.PasswordChangeRequestDto;
-import com.asterisk.backend.adapter.user.model.UserChangeRequestDto;
+import com.asterisk.backend.adapter.rest.authentication.model.PasswordChangeRequestDto;
+import com.asterisk.backend.adapter.rest.user.model.UserChangeRequestDto;
 import com.asterisk.backend.domain.User;
 import com.asterisk.backend.store.user.UserEntity;
 import com.asterisk.backend.store.user.UserRepository;

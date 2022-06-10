@@ -1,4 +1,4 @@
-package com.asterisk.backend.adapter.authentication.model;
+package com.asterisk.backend.adapter.rest.authentication.model;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
